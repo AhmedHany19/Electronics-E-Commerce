@@ -1,0 +1,180 @@
+﻿@model OrderDetailsCartViewModel
+
+
+
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3 class="breadcrumb-header">Checkout</h3>
+				<ul class="breadcrumb-tree">
+					<li><a href="/">Home</a></li>
+					<li class="active">Checkout</li>
+				</ul>
+			</div>
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+
+
+
+<!-- SECTION -->
+<div class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+
+			<!-- Order Details -->
+			
+			<form method="post">
+
+
+                @if (Model.ShoppingCarts.Count > 0)
+                {
+                    <br />
+                    <input id="userId" asp-for="@Model.ShoppingCarts[0].ApplicationUserId" hidden />
+                    <div class="backgroundWhiteBorder">
+                        <div class="container">
+                            <div class="card">
+                                <div class="card-header bg-dark text-light row ">
+                                    <div class="col-md-10">
+                                        <i class="fa fa-shopping-cart"></i> &nbsp;
+                                        Shopping Cart
+                                    </div>
+                                    <div class="col-md-2 ">
+                                        <a asp-area="Customer" asp-controller="Home" asp-action="Index" class=" text-white btn btn-outline-success">Continue Shopping</a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    @foreach (var item in Model.ShoppingCarts)
+                                    {
+                                        <div class="row">
+                                            <div class="d-none d-lg-block col-lg-2 text-center py-2">
+                                                <img src="@Helper.PathImageProduct/@item.Product.ImageUrl" class="rounded-circle" width="120" height="80" />
+                                            </div>
+                                            <div class="col-12 text-center col-lg-5 ">
+                                                <h4><strong>@item.Product.Name</strong></h4>                                               
+                                            </div>
+                                            <div class="col-md-12 text-sm-center col-lg-5 row float-end">
+
+                                                <div class="col-md-6 mt-4 mx-5">
+
+                                                    <div class="row">
+
+                                                        <div class="col-md-2">
+                                                            <button type="submit" class="btn btn-primary" asp-action="plus" asp-route-cartId="@item.Id">
+                                                                <i class="fa fa-plus"></i>
+                                                            </button>
+                                                        </div>
+
+                                                        <div class="col-md-7 text-right" style="padding-top:5px;">
+                                                            <h6><strong>$@item.Product.Price <span class="text-muted">x</span>@item.Count</strong></h6>
+                                                        </div>
+
+                                                        <div class="col-md-2">
+                                                            <button type="submit" class="btn btn-danger" asp-action="minus" asp-route-cartId="@item.Id">
+                                                                <i class="fa fa-minus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-2 col-sm-4 col-lg-2 mt-4">
+                                                    <button type="submit" class="btn btn-danger" asp-action="RemoveFromCart" asp-route-cartId="@item.Id">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                    }
+
+                                    <div class="row">    
+                                        <div class="col-md-8"> 
+
+                                        </div>
+                                        <div class="col-md-4 float-right">
+                                            <ul class="list-group">
+                                                <li class="list-group-item d-flex justify-content-between bg-light">
+                                                    <span class="text-primary text-bold"> Total (USD)</span>
+                                                    <strong class="text-primary">$<span id="txtOrderTotal">@Model.OrderHeader.OrderTotal.ToString("0.00")</span></strong>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="card-footer">
+                                    <div class="col-md-6 offset-md-3">
+                                        <a asp-action="PlaceOrder" asp-area="Customer" asp-controller="Carts" class="btn btn-success form-control">Place Order</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+                else
+                {
+                    <div class="backgroundWhiteBorder"> No items added to teh shopping cart...</div>
+                }
+
+            </form>
+
+
+			<!-- /Order Details -->
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /SECTION -->
+
+
+
+
+
+<!-- NEWSLETTER -->
+<div id="newsletter" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<div class="newsletter">
+					<p>Sign Up for the <strong>NEWSLETTER</strong></p>
+					<form>
+						<input class="input" type="email" placeholder="Enter Your Email">
+						<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
+					</form>
+					<ul class="newsletter-follow">
+						<li>
+							<a href="#"><i class="fa fa-facebook"></i></a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-twitter"></i></a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-instagram"></i></a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-pinterest"></i></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /NEWSLETTER -->

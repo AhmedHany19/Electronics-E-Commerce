@@ -1,0 +1,355 @@
+﻿@model ProductAndCategoriesViewModel
+
+
+
+
+
+
+<div class="container">
+	<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+		<div class="carousel-indicators">
+			<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+			<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+			<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+		</div>
+		<div class="carousel-inner">
+
+			<div class="carousel-item active ">
+				<img src="~/images/sliders/pexels-photo-3183177.jpeg" style="width:1000px; height:500px;" alt="...">
+            </div>
+			@foreach (var item in Model.Sliders)
+			{
+				<div class="carousel-item  ">
+					<img src="@Helper.PathImageSlider/@item.ImageUrl" style="width:1000px; height:500px;" alt="...">
+				</div>
+            }
+
+		</div>
+		<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Previous</span>
+		</button>
+		<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Next</span>
+		</button>
+	</div>
+</div>
+<!-- Slider With Banner Area End Here -->
+
+
+
+
+
+
+<!-- SECTION -->
+<div class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<h2>Categories</h2>
+			<!-- shop -->
+			@foreach (var item in Model.Categories)
+			{
+				<div class="col-md-4 col-xs-6">
+					<div class="shop">
+						<div class="shop-img">
+							<img src="@Helper.PathImageCategory/@item.ImageUrl" style="width:300px; height:250px;" alt="">
+						</div>
+						<div class="shop-body">
+
+							<form asp-action="Search" asp-controller="Home" method="post">
+								<h3>@item.Name<br>Collection</h3>
+								@*								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+							*@								<button name="searchName" type="submit" class="btn-outline-danger" id="searchString" value="@item.Name">
+									<i class="fa fa-arrow-circle-right"></i>Show All
+								</button>
+							</form>
+
+						</div>
+					</div>
+				</div>
+			}
+
+			<!-- /shop -->
+
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /SECTION -->
+<!-- SECTION -->
+<div class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+
+			<!-- section title -->
+			<div class="col-md-12">
+				<div class="section-title">
+					<h3 class="title">New Products</h3>
+				</div>
+			</div>
+			<!-- /section title -->
+			<!-- Products tab & slick -->
+			<div class="col-md-12">
+				<div class="row">
+					<div class="products-tabs">
+						<!-- tab -->
+						<div id="tab1" class="tab-pane active">
+							<div class="products-slick" data-nav="#slick-nav-1">
+								<!-- product -->
+								@foreach (var item in ViewBag.RecentProduct)
+								{
+									<div class="product">
+										<div class="product-img text-center">
+
+											<div class="product-label">
+												<span class="new">NEW</span>
+											</div>
+
+											<div class="mt-5">
+												<img src="@Helper.PathImageProduct/@item.ImageUrl" alt="" style="height:20vh;width:10vw;">
+											</div>
+
+										</div>
+										<div class="product-body">
+											<p class="product-category">@item.Category.Name</p>
+											<h3 class="product-name"><a href="#">@item.Name</a></h3>
+											<h4 class="product-price price">$@item.Price <del class="product-old-price">$@item.Discount</del></h4>
+											<div class="product-rating">
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+											</div>
+											<div class="product-btns">
+												<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>												
+											    <a asp-action="Details" asp-controller="Home" asp-route-id="@item.Id" class=" quick-view">
+													<i class="fa fa-eye"></i><span class="tooltipp">Details</span>
+												</a>
+
+											</div>
+											<p class="card-text ">
+												<b>Status: </b>
+												@if (item.IsAvailable == true)
+												{
+													<span class="badge bg-primary text-white">AVAILABLE</span>
+												}
+												else
+												{
+													<span class="badge bg-danger text-white">In Stock</span>
+												}
+											</p>
+										</div>
+										<div class="add-to-cart">
+											<form asp-action="AddToCart" method="post">
+												<input type="hidden" name="productName" value="@item.Name" />
+												<input type="hidden" name="price" value="@item.Price" />
+												<input type="hidden" name="discount" value="@item.Discount" />
+												<input type="hidden" name="productId" value="@item.Id" />
+
+												@{
+													if (item.IsAvailable == true)
+													{
+														<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+
+													}
+													else
+													{
+														<button class="add-to-cart-btn" disabled><i class="fa fa-shopping-cart"></i> add to cart</button>
+
+													}
+												}
+
+											</form>
+										</div>
+									</div>
+								}
+
+								<!-- /product -->
+
+							</div>
+							<div id="slick-nav-1" class="products-slick-nav"></div>
+						</div>
+						<!-- /tab -->
+					</div>
+				</div>
+			</div>
+			<!-- Products tab & slick -->
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /SECTION -->
+<!-- HOT DEAL SECTION -->
+<div id="hot-deal" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<div class="hot-deal">
+					<ul class="hot-deal-countdown">
+						<li>
+							<div>
+								<h3>02</h3>
+								<span>Days</span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<h3>10</h3>
+								<span>Hours</span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<h3>34</h3>
+								<span>Mins</span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<h3>60</h3>
+								<span>Secs</span>
+							</div>
+						</li>
+					</ul>
+					<h2 class="text-uppercase">hot deal this week</h2>
+					<p>New Collection Up to 50% OFF</p>
+					<a class="primary-btn cta-btn" href="#">Shop now</a>
+				</div>
+			</div>
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /HOT DEAL SECTION -->
+<!-- SECTION Top Selling -->
+<div class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+
+			<!-- section title -->
+			<div class="col-md-12">
+				<div class="section-title">
+					<h3 class="title">Top Discount Products</h3>
+				</div>
+			</div>
+			<!-- /section title -->
+			<!-- Products tab & slick -->
+			<div class="col-md-12">
+				<div class="row">
+					<div class="products-tabs">
+						<!-- tab -->
+						<div id="tab2" class="tab-pane fade in active">
+							<div class="products-slick" data-nav="#slick-nav-2">
+								<!-- product -->
+								@foreach (var item in ViewBag.BestDiscount)
+								{
+									<div class="product">
+										<div class="product-img">
+											<div class="product-label">
+												<span class="new">NEW</span>
+											</div>
+											<div class="mt-5">
+												<img src="@Helper.PathImageProduct/@item.ImageUrl" alt="" style="width:150px; height:160px;">
+											</div>
+
+										</div>
+										<div class="product-body">
+											<p class="product-category">@item.Category.Name</p>
+											<h3 class="product-name"><a href="#">@item.Name</a></h3>
+											<h4 class="product-price price">$@item.Price <del class="product-old-price">$@item.Discount</del></h4>
+											<div class="product-btns">
+												<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+												<a asp-action="Details" asp-controller="Home" asp-route-id="@item.Id" class=" quick-view">
+													<i class="fa fa-eye"></i><span class="tooltipp">Details</span>
+												</a>
+
+											</div>
+											<p class="card-text ">
+												<b>Status: </b>
+												@if (item.IsAvailable == true)
+												{
+													<span class="badge bg-primary text-white">AVAILABLE</span>
+												}
+												else
+												{
+													<span class="badge bg-danger text-white">In Stock</span>
+												}
+											</p>
+										</div>
+										<div class="add-to-cart">
+											<form asp-action="AddToCart" method="post">
+												<input type="hidden" name="productName" value="@item.Name" />
+												<input type="hidden" name="price" value="@item.Price" />
+												<input type="hidden" name="discount" value="@item.Discount" />
+												<input type="hidden" name="productId" value="@item.Id" />
+
+												<button class="add-to-cart-btn form-c"><i class="fa fa-shopping-cart"></i> Add to cart</button>
+
+											</form>
+										</div>
+									</div>
+								}
+
+								<!-- /product -->
+							</div>
+							<div id="slick-nav-2" class="products-slick-nav"></div>
+						</div>
+						<!-- /tab -->
+					</div>
+				</div>
+			</div>
+			<!-- /Products tab & slick -->
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /SECTION -->
+<!-- NEWSLETTER -->
+<div id="newsletter" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<div class="newsletter">
+					<p>Sign Up for the <strong>NEWSLETTER</strong></p>
+					<form>
+						<input class="input" type="email" placeholder="Enter Your Email">
+						<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
+					</form>
+					<ul class="newsletter-follow">
+						<li>
+							<a href="#"><i class="fa fa-facebook"></i></a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-twitter"></i></a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-instagram"></i></a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-pinterest"></i></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /NEWSLETTER -->

@@ -1,0 +1,205 @@
+﻿@model List<Product>
+
+@{
+	ViewData["Title"] = "ShopPage";
+}
+
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<ul class="breadcrumb-tree">
+					<li><a href="/">Home</a></li>
+					<li><a href="/Customer/Home/ShopPage">All Product</a></li>
+				</ul>
+			</div>
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+<!-- SECTION -->
+<div class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+
+			<!-- ASIDE -->
+			<div id="aside" class="col-md-3">
+				<!--Search Bar-->
+				<div class="mb-5">
+					<form asp-action="Search" asp-area="Customer" asp-controller="Home" method="post">
+						<div class="row">
+							<div class="col-md-9">
+								<input type="text" class="form-control" name="searchName" placeholder="Search" />
+							</div>
+							<div class="col-md-3">
+								<input type="submit" value="Search" class="btn btn-success" />
+							</div>
+						</div>
+					</form>
+				</div>
+				<!-- / Search Bar-->
+				<!-- Aside Category-->
+				<div class="aside">
+					<h3>Categories</h3>
+					<div>
+						<form asp-action="Search" asp-controller="Home" asp-area="Customer" method="post">
+							@foreach (var item in ViewBag.Categories)
+							{
+								<input name="searchName" type="submit" class="text-black btn btn-outline-light" id="searchString" value="@item.Name" placeholder="Shop now">
+							}
+
+
+						</form>
+					</div>
+				</div>
+				<!--/ Aside Category-->
+				<!-- aside Widget Filter By Price -->
+				<div class="aside">
+					<h3>Filter By Price</h3>
+					<div class="price-filter">
+						<div id="price-slider"></div>
+						<form asp-action="ShopPage" asp-area="Customer" method="post">
+							<div class="row">
+								<div class="col-md-5">
+									<input type="number" class="form-control" name="lowAmount" placeholder="From" />
+								</div>
+								<div class="col-md-5">
+									<input type="number" class="form-control" name="largeAmount" placeholder="To" />
+								</div>
+								<div class="col-md-1">
+									<input type="submit" value="$" class="btn btn-success" />
+								</div>
+							</div>
+						</form>
+
+					</div>
+				</div>
+				<!-- /aside Widget -->
+				<!-- Aside Brands-->
+				<div class="aside mt-5">
+					<h3>Brands</h3>
+					<div>
+						<form asp-action="Search" asp-area="Customer" asp-controller="Home" method="post">
+							@foreach (var item in ViewBag.Brands)
+							{
+								<input name="searchName" type="submit" class="text-black btn btn-outline-light" id="searchString" value="@item.Name" placeholder="Shop now">
+							}
+						</form>
+					</div>
+				</div>
+				<!--/ Aside Brands-->
+
+
+			</div>
+			<!-- /ASIDE -->
+			<!-- STORE -->
+			<div id="store" class="col-md-9">
+
+				
+				<!-- store products -->
+				<div class="row ms-5">
+					@foreach (var item in Model)
+					{
+						<!-- product -->
+						<div class="col-md-4">
+							<div class="product">
+								<form asp-action="Detail" asp-area="Customer" asp-controller="Home" asp-route-id="@item.Id" method="post">
+									<div class="product-img text-center">
+										<img src="@Helper.PathImageProduct/@item.ImageUrl" alt="" style="height:20vh;width:10vw;" >
+										<div class="product-label">
+											<span class="new">NEW</span>
+										</div>
+									</div>
+									<div class="product-body">										
+										<h3 class="product-name"><a href="#">@item.Name</a></h3>
+										<h4 class="product-price price">$@item.Price <del class="product-old-price">$990.00</del></h4>
+										<div class="product-rating">
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="product-btns">
+											<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+											<a asp-action="Details" asp-controller="Home" asp-route-id="@item.Id" class=" quick-view">
+												<i class="fa fa-eye"></i><span class="tooltipp">Details</span>
+											</a>
+										</div>
+									</div>
+									
+								</form>
+								<div class="add-to-cart">
+									<form asp-action="Details" asp-area="Customer" asp-controller="Home" method="post">
+										<input type="hidden" name="productId" value="@item.Id" />
+
+										<button class="add-to-cart-btn form-c"><i class="fa fa-shopping-cart"></i> Add to cart</button>
+
+									</form>
+								</div>
+								
+							</div>
+
+
+						</div>
+						<div class="clearfix visible-sm visible-xs"></div>
+					}
+
+					<!-- /product -->
+
+				</div>
+				<!-- /store products -->
+
+
+			</div>
+			<!-- /STORE -->
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+
+<!-- /SECTION -->
+<!-- NEWSLETTER -->
+<div id="newsletter" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<div class="newsletter">
+					<p>Sign Up for the <strong>NEWSLETTER</strong></p>
+					<form>
+						<input class="input" type="email" placeholder="Enter Your Email">
+						<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
+					</form>
+					<ul class="newsletter-follow">
+						<li>
+							<a href="#"><i class="fa fa-facebook"></i></a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-twitter"></i></a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-instagram"></i></a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-pinterest"></i></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /NEWSLETTER -->

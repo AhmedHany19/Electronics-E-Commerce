@@ -1,0 +1,216 @@
+﻿@model OrderDetailsCartViewModel
+@inject IOptions<StripeSettings> Stripe
+
+
+
+
+
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3 class="breadcrumb-header">Checkout</h3>
+				<ul class="breadcrumb-tree">
+					<li><a href="#">Home</a></li>
+					<li class="active">Checkout</li>
+				</ul>
+			</div>
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+
+
+<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<form method="post">
+						 @if (Model.ShoppingCarts.Count > 0)
+				{
+					<br />
+					<input id="userId" asp-for="@Model.ShoppingCarts[0].ApplicationUserId" hidden />
+				
+				<div class="col-md-7">
+						<!-- Billing Details -->
+						<div class="billing-details">
+							<div class="section-title">
+								<h3 class="title">Order address</h3>
+							</div>
+							<div class="form-group">
+								<label asp-for="@Model.OrderHeader.PickUpName"></label>
+								<input asp-for="@Model.OrderHeader.PickUpName" readonly type="text" class="form-control" />
+							</div>							
+							<div class="form-group">
+								<label asp-for="@Model.OrderHeader.Email"></label>
+								<input asp-for="@Model.OrderHeader.Email"  readonly type="text" class="form-control">
+							</div>
+							<div class="form-group">
+								<label asp-for="@Model.OrderHeader.Address"></label>
+								<input asp-for="@Model.OrderHeader.Address" id="txtAdress" type="text" required class="form-control" 
+								oninvalid="this.setCustomValidity('Please Enter Your Address')"
+								   oninput="setCustomValidity('')">
+							</div>
+							<div class="form-group">
+								<label asp-for="@Model.OrderHeader.City"></label>
+								<input asp-for="@Model.OrderHeader.City" id="txtCity" type="text" required class="form-control"
+								   oninvalid="this.setCustomValidity('Please Enter Your City')"
+								   oninput="setCustomValidity('')">
+							</div>
+							<div class="form-group">
+									<label asp-for="@Model.OrderHeader.Country"></label>
+								<input asp-for="@Model.OrderHeader.Country" id="txtCountry"  required type="text" class="form-control"
+								   oninvalid="this.setCustomValidity('Please Enter Your Country')"
+								   oninput="setCustomValidity('')">
+							</div>
+							<div class="form-group">
+								<label asp-for="@Model.OrderHeader.PostalCode"></label>
+								<input asp-for="@Model.OrderHeader.PostalCode" required id="txtCode" type="number" class="form-control"
+								   oninvalid="this.setCustomValidity('Please Enter Your Postal Code')"
+								   oninput="setCustomValidity('')">
+							</div>
+							<div class="form-group">
+								<label asp-for="@Model.OrderHeader.PhoneNumber"></label>
+								<input asp-for="@Model.OrderHeader.PhoneNumber" required id="txtPhone" type="tel" class="form-control" 
+								oninvalid="this.setCustomValidity('Please Enter Your Valid Phone No')"
+								   oninput="setCustomValidity('')">
+							</div>
+							<div class="form-group">
+								<label asp-for="@Model.OrderHeader.OrderDate"></label>
+								<input asp-for="@Model.OrderHeader.OrderDate" readonly id="txtName" type="date" class="form-control">
+							</div>
+						</div>
+						<!-- /Billing Details -->
+
+						<!-- Shiping Details -->
+						<div class="shiping-details">
+							<div class="section-title">
+								<h3 class="title">Comments</h3>
+							</div>							
+						</div>
+						<!-- /Shiping Details -->
+
+						<!-- Order notes -->
+						<div class="order-notes">
+							<textarea asp-for="@Model.OrderHeader.Comments" id="txtName" type="text" class="form-control"></textarea>
+						</div>
+						<!-- /Order notes -->
+					</div>
+
+					<!-- Order Details -->
+					<div class="col-md-5 order-details">
+						<div class="section-title text-center">
+							<h3 class="title">Your Order</h3>
+						</div>
+						<div class="order-summary">
+							<div class="order-col">
+								<div><strong>PRODUCT</strong></div>
+								<div><strong>TOTAL</strong></div>
+							</div>
+							<div class="order-products">
+								@{
+									var total = 0.0;
+								}
+								@foreach (var details in Model.ShoppingCarts)
+								{
+									<div class="order-col">
+										<div>@(details.Count)x @details.Product.Name</div>
+										<div>$@details.Product.Price</div>
+									</div>
+								}
+
+									
+								
+							</div>
+							<div class="order-col">
+								<div>Shiping</div>
+								<div><strong>FREE</strong></div>
+							</div>
+							<div class="order-col">
+								<div><strong>TOTAL</strong></div>
+								<div><strong class="order-total">$@(Model.OrderHeader.OrderTotalOriginal)</strong></div>
+							</div>
+						</div>	
+						<div>
+							@{
+								var OrderTotalForStripe = Model.OrderHeader.OrderTotalOriginal * 100;
+							}
+
+							<script src="https://checkout.stripe.com/checkout.js"
+							class="stripe-button"
+							data-key="@Stripe.Value.PublishableKey"
+							data-amount="@OrderTotalForStripe"
+							data-name="Electronics Shop"
+							data-label="Place Order"
+							data-description="Free And Fast Shiping"
+							data-locale="auto"
+							data-allow-remember-m="false"
+							data-image="https://stripe.com/img/documentation/checkout/marketplace.png" >
+							</script>
+
+														
+							<script>
+								document.getElementsByClassName("stripe-button-el")[0].style.display = 'none';
+							</script>
+
+							<button type="submit" id="btnPlaceOrder" value="Place Order" class="primary-btn order-submit">Place Order</button>
+						</div>
+					</div>
+					<!-- /Order Details -->
+				}
+			</form>
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+
+
+
+<!-- NEWSLETTER -->
+<div id="newsletter" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<div class="newsletter">
+					<p>Sign Up for the <strong>NEWSLETTER</strong></p>
+					<form>
+						<input class="input" type="email" placeholder="Enter Your Email">
+						<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
+					</form>
+					<ul class="newsletter-follow">
+						<li>
+							<a href="#"><i class="fa fa-facebook"></i></a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-twitter"></i></a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-instagram"></i></a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-pinterest"></i></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /NEWSLETTER -->
+
+

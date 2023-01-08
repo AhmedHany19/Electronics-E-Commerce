@@ -1,0 +1,157 @@
+﻿@using WebApp.Resource;
+@model RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 3 | Log in</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/Admin/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="~/Admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/Admin/dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+
+
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="/"><b>Electro</b></a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Sign up to start your session</p>
+
+
+                <form asp-action="Login" asp-controller="Users" method="post">
+                    @if (ViewBag.ErrorLogin == false)
+                    {
+                        <span class="alert alert-danger w-100">@ResourceWeb.lbMsgErrorLogin</span>
+
+                        <br />
+
+                        <br />
+                    }
+
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" asp-for="NewRegister.Name" placeholder="Name">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="text-danger" asp-validation-for="NewRegister.Email"></span>
+
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" asp-for="NewRegister.Email" placeholder="Email">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="text-danger" asp-validation-for="NewRegister.Email"></span>
+
+
+                    <div class="input-group mb-3">
+                        <input type="password" asp-for="NewRegister.Password" class="form-control" placeholder="Password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="text-danger" asp-validation-for="NewRegister.Password"></span>
+
+
+                     <div class="input-group mb-3">
+                        <input type="password" asp-for="NewRegister.ComfirmPassword" class="form-control" placeholder="ComfirmPassword">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="text-danger" asp-validation-for="NewRegister.ComfirmPassword"></span>
+
+
+
+                    <div class="row">
+                      
+                        <!-- /.col -->
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-primary form-control">Register</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </form>
+
+                
+                <!-- /.social-auth-links -->
+
+                
+                <p class="mb-0 text-center">
+                    <a href="/Customer/Users/Login" class="text-center">I Have an Account</a>
+                </p>
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+    <!-- /.login-box -->
+    <!-- jQuery -->
+    <script src="~/Admin/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/Admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+
+
+
+@*
+<h1>Registers</h1>
+<div class="container">
+<form asp-action="Register" asp-controller="Users" method="post" >
+    <div class="form-group">
+        <input type="text" hidden class="form-control" asp-for="NewRegister.Id" id="userId" />
+        <label asp-for="NewRegister.Name" class="control-lable">@ResourceWeb.lbNameUser</label>
+        <input type="text" class="form-control" asp-for="NewRegister.Name" required id="userName" />
+        <span asp-validation-for="NewRegister.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="NewRegister.Email" class="control-lable">@ResourceWeb.lbEmailUser</label>
+        <input type="text" class="form-control" asp-for="NewRegister.Email" required id="userEmail" />
+        <span asp-validation-for="NewRegister.Email" class="text-danger"></span>
+    </div>   
+    <div class="form-group" id="grPassword">
+        <label asp-for="NewRegister.Password" class="control-lable">@ResourceWeb.lbPassword</label>
+        <input type="password" class="form-control" asp-for="NewRegister.Password" required id="userPassword" />
+        <span asp-validation-for="NewRegister.Password" class="text-danger"></span>
+    </div>
+    <div class="form-group" id="grcomPassword">
+        <label asp-for="NewRegister.ComfirmPassword" class="control-lable">@ResourceWeb.lbComparePassword</label>
+        <input type="password" class="form-control" asp-for="NewRegister.ComfirmPassword" required id="userCompare" />
+        <span asp-validation-for="NewRegister.ComfirmPassword" class="text-danger"></span>
+    </div>
+    <div class="modal-footer-rtl" style="padding:0 15px 15px 0">
+        <input type="submit" class="btn btn-success" value="@ResourceWeb.lbbtnSave" id="btnSave" />
+    </div>
+</form>
+</div>*@

@@ -1,0 +1,95 @@
+﻿@using Domain.Entity;
+@model OrderDetailsViewModel
+
+
+<form asp-action="OrderPickup" asp-controller="Orders" asp-route-orderId="@Model.OrderHeader.Id" method="post">
+    <div class="container row border mb-5 p-5 " style="width:100%">
+        <div class="col-md-8 " >
+            <br />
+            <input type="hidden" asp-for="OrderHeader.Id" />
+
+            <div class="form-group row mt-1">
+                <div class="col-3">
+                    <label>Name</label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="OrderHeader.PickUpName" disabled class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group row mt-3">
+                <div class="col-3">
+                    <label asp-for="OrderHeader.ApplicationUser.Email"></label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="OrderHeader.ApplicationUser.Email" disabled class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row mt-3">
+                <div class="col-3">
+                    <label asp-for="OrderHeader.ApplicationUser.PhoneNumber"></label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="OrderHeader.ApplicationUser.PhoneNumber" disabled class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row mt-3">
+                <div class="col-3">
+                    <label asp-for="OrderHeader.OrderTotalOriginal"></label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="OrderHeader.OrderTotalOriginal" disabled class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row mt-3">
+                <div class="col-3">
+                    <label asp-for="OrderHeader.OrderDate"></label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="OrderHeader.OrderDate" disabled class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row mt-3">
+                <div class="col-3">
+                    <label asp-for="OrderHeader.Comments"></label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="OrderHeader.Comments" disabled class="form-control" />
+                </div>
+            </div>
+        </div>
+
+        <div class=" col-md-4 mt-3 ">
+            <h4 class="d-flex justify-content-between align-content-center">
+                <span class="text-muted">Order ID: </span>
+                <span class="badge badge-secondary badge-pill">@Model.OrderHeader.Id</span>
+            </h4>
+            <ul class="list-group mb-3">
+                @foreach (var details in Model.OrderDetails)
+                {
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <h6 class="my-0">@details.Name</h6>
+                            <small class="text-muted">Quantity : @details.Count</small>
+                        </div>
+                        <span class="text-muted">@(details.Price * details.Count)</span>
+                    </li>
+                }
+               
+                <li class="list-group-item d-flex justify-content-between bg-light">
+                    <span class="text-info"> Total (USD)</span>
+                    <strong class="text-info">$@Model.OrderHeader.OrderTotalOriginal</strong>
+                </li>
+            </ul>
+            @if (Model.OrderHeader.Status.Equals(Helper.StatusReady) && (User.IsInRole(Helper.Name) || User.IsInRole(Helper.Admin)))
+            {
+                <button type="submit" class="btn btn-success form-control"><i class="far fa-thumbs-up"></i> Confirm Pickup</button>
+            }
+            else
+            {
+                <button type="submit" disabled class="btn btn-info form-control">@Model.OrderHeader.Status</button>
+            }
+
+        </div>
+    </div>
+</form>
