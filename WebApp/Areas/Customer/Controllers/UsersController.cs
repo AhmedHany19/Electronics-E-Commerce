@@ -34,11 +34,8 @@ namespace WebApp.Areas.Customer.Controllers
         [AllowAnonymous]
         public IActionResult Register()
         {
-            var model = new RegisterViewModel
-            {
-                NewRegister = new NewRegister(),              
-            };
-            return View(model);
+           
+            return View();
         }
 
 
@@ -48,19 +45,24 @@ namespace WebApp.Areas.Customer.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(UserRegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            model.Id = Guid.NewGuid().ToString();
+
+            if (model!=null)
             {
 
                 var user = new ApplicationUser
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = model.NewRegister.Name,
-                    UserName = model.NewRegister.Email,
-                    Email = model.NewRegister.Email,
+                {                
+                    Name = model.Name,
+                    UserName = model.Email,
+                    Email = model.Email,
+                    ActiveUser = true,
+                    PhoneNumber=model.PhoneNumber.ToString(),              
                 };
-                var result=  await _userManager.CreateAsync(user, model.NewRegister.Password);
+
+                var result=  await _userManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, Helper.Basic);

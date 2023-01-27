@@ -1,4 +1,5 @@
-﻿using Domain.Entity;
+﻿using Domain.Constants;
+using Domain.Entity;
 using Infrastructure.IRepository;
 using Infrastructure.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -30,8 +31,8 @@ namespace WebApp.Areas.Admin.Controllers
 
 		}
 
-
-		public IActionResult Brands()
+        [Authorize(Permissions.Brands.View)]
+        public IActionResult Brands()
 		{
 			//ViewData["CategoryId"] = new SelectList(_servicesCategory.GetAll(), "Id", "Name");
 
@@ -45,8 +46,9 @@ namespace WebApp.Areas.Admin.Controllers
 			});
 		}
 
+        [Authorize(Permissions.Brands.Delete)]
 
-		public IActionResult Delete(Guid Id)
+        public IActionResult Delete(Guid Id)
 		{
 			var userId = _userManager.GetUserId(User);
 			if (_servicesBrand.Delete(Id) && _servicesLogBrand.Delete(Id, Guid.Parse(userId)))
@@ -58,7 +60,9 @@ namespace WebApp.Areas.Admin.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[AllowAnonymous]
-		public IActionResult Save(BrandViewModel model)
+        [Authorize(Permissions.Brands.Create)]
+
+        public IActionResult Save(BrandViewModel model)
 		{
 
 			if (ModelState.IsValid)

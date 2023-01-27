@@ -1,6 +1,8 @@
-﻿using Domain.Entity;
+﻿using Domain.Constants;
+using Domain.Entity;
 using Infrastructure.IRepository;
 using Infrastructure.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +23,9 @@ namespace WebApp.Areas.Admin.Controllers
 			_servicesLogCategory = servicesLogCategory;
 			_servicesCategory = servicesCategory;
 		}
-		public IActionResult Categories()
+
+        [Authorize(Permissions.Categories.View)]
+        public IActionResult Categories()
 		{
 			return View(new CategoryViewModel
 			{
@@ -31,7 +35,8 @@ namespace WebApp.Areas.Admin.Controllers
 			});
 		}
 
-		public IActionResult Delete(Guid Id)
+        [Authorize(Permissions.Categories.Delete)]
+        public IActionResult Delete(Guid Id)
 		{
 			var category = _servicesCategory.FindBy(Id);
 			if (category.ImageUrl != null && category.ImageUrl != Guid.Empty.ToString())
@@ -50,7 +55,9 @@ namespace WebApp.Areas.Admin.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public IActionResult Save(CategoryViewModel model)
+        [Authorize(Permissions.Categories.Create)]
+
+        public IActionResult Save(CategoryViewModel model)
 		{
 
 			var file = HttpContext.Request.Form.Files;

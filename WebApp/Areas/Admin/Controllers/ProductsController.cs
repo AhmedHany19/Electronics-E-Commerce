@@ -1,4 +1,5 @@
-﻿using Domain.Entity;
+﻿using Domain.Constants;
+using Domain.Entity;
 using Infrastructure.IRepository;
 using Infrastructure.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -31,7 +32,9 @@ namespace WebApp.Areas.Admin.Controllers
 
 
 		}
-		public IActionResult Products()
+        [Authorize(Permissions.Products.View)]
+
+        public IActionResult Products()
 		{
 			return View(new ProductViewModel
 			{
@@ -43,7 +46,9 @@ namespace WebApp.Areas.Admin.Controllers
 			});
 		}
 
-		public IActionResult Delete(Guid Id)
+
+        [Authorize(Permissions.Products.Delete)]
+        public IActionResult Delete(Guid Id)
 		{
 			var product = _servicesProduct.FindBy(Id);
 			if (product.ImageUrl != null && product.ImageUrl != Guid.Empty.ToString())
@@ -62,8 +67,9 @@ namespace WebApp.Areas.Admin.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		[AllowAnonymous]
-		public IActionResult Save(ProductViewModel model)
+        [Authorize(Permissions.Products.Create)]
+
+        public IActionResult Save(ProductViewModel model)
 		{
 			var file = HttpContext.Request.Form.Files;
 			if (file.Count() > 0)

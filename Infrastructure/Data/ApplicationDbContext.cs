@@ -28,8 +28,6 @@ namespace Infrastructure.Data
 			builder.Entity<Brand>().Property(x => x.Id).HasDefaultValueSql("(newid())");
 			builder.Entity<LogBrand>().Property(x => x.Id).HasDefaultValueSql("(newid())");
 			builder.Entity<ShoppingCart>().Property(x => x.Id).HasDefaultValueSql("(newid())");
-			builder.Entity<Slider>().Property(x => x.Id).HasDefaultValueSql("(newid())");
-
 			builder.Entity<Product>().HasOne(a => a.Category).WithMany(a => a.Products).HasForeignKey(a => a.CategoryId).OnDelete(DeleteBehavior.ClientSetNull);
 			builder.Entity<Product>().HasOne(a => a.Brand).WithMany(a => a.Products).HasForeignKey(a => a.BrandId).OnDelete(DeleteBehavior.ClientSetNull);
 
@@ -52,6 +50,6 @@ namespace Infrastructure.Data
 		public DbSet<OrderHeader>? OrderHeaders { get; set; }
 		public DbSet<ApplicationUser>? ApplicationUsers { get; set; }
 		public DbSet<VwUser>? VwUsers { get; set; }
-		public DbSet<Slider>? sliders { get; set; }
+		public DbSet<ContactUs>? ContactUs { get; set; }
 	}
 }

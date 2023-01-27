@@ -150,6 +150,12 @@
   <data name="Password" xml:space="preserve">
     <value>يجب ادخال الرقم السري</value>
   </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>يجب ادخال رقم التليفون</value>
+  </data>
+  <data name="PhoneNumberError" xml:space="preserve">
+    <value>يجب ادخال رقم التليفون بشكل صحيح</value>
+  </data>
   <data name="PriceValue" xml:space="preserve">
     <value>يجب ادخال سعر المنتج</value>
   </data>

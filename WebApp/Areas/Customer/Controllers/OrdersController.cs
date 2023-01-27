@@ -18,8 +18,34 @@ namespace WebApp.Areas.Customer.Controllers
 			_db = db;
 			
 		}
+       
 
-		public async Task<IActionResult> Confirm(int id)
+        public async Task<IActionResult> Orders()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            List<OrderDetailsViewModel> orderDetailsVMList = new List<OrderDetailsViewModel>();
+
+            List<OrderHeader> orderHeadersList = await _db.OrderHeaders.Include(x => x.ApplicationUser).ToListAsync();
+
+            foreach (var orderHeader in orderHeadersList)
+            {
+                OrderDetailsViewModel orderDetailsVM = new OrderDetailsViewModel()
+                {
+                    OrderHeader = orderHeader,
+                    OrderDetails = _db.OrderDetails.Where(x => x.OrderId == orderHeader.Id).ToList()
+                };
+
+                orderDetailsVMList.Add(orderDetailsVM);
+            }
+
+            return View(orderDetailsVMList);
+        }
+
+
+
+        public async Task<IActionResult> Confirm(int id)
 		{
 			var claimsIdentity = (ClaimsIdentity)User.Identity;
 			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -100,11 +126,6 @@ namespace WebApp.Areas.Customer.Controllers
                 orderDetailsVMList.Add(orderDetailsVM);
             }
 
-
-
-
-
-
             return View(orderDetailsVMList.OrderByDescending(x => x.OrderHeader.PickUpDate).ToList());
         }
 
@@ -138,11 +159,6 @@ namespace WebApp.Areas.Customer.Controllers
 
             return RedirectToAction("ManageOrder", "Orders");
         }
-
-
-
-
-
 
 
         [Authorize]

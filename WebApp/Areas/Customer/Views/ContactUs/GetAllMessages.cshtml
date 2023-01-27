@@ -1,0 +1,40 @@
+﻿@model List<ContactUs>
+
+@{
+    ViewData["Title"] = "Messages";
+}
+
+<div class="text-center "> 
+    <h3>Messages</h3>
+    <hr />
+</div>
+
+<div class="container-fluid row"> 
+
+    @foreach (var item in Model)
+    {
+     <div class="card col-md-7 mx-auto mt-5 mb-5">
+      <div class="card-header">
+        @item.Id - @item.Name , @item.Phone
+      </div>
+      <div class="card-body">
+        <blockquote class="blockquote mb-0">
+          <p>_ @item.Message</p>
+        </blockquote>
+      </div>
+      <div class="card-header">
+         @item.Email
+      </div>
+            
+    </div>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="@item.Id" name="id">
+            <div class="text-center mb-5">
+                <input type="submit" class="btn btn-danger" value="Delete">
+            </div>
+    </form>
+        
+   
+    }
+
+</div>

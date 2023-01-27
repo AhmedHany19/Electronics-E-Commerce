@@ -1,4 +1,9 @@
-﻿@model List<Product>
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+
+
+@model IPagedList<Product>
 
 @{
 	ViewData["Title"] = "ShopPage";
@@ -37,7 +42,7 @@
 					<form asp-action="Search" asp-area="Customer" asp-controller="Home" method="post">
 						<div class="row">
 							<div class="col-md-9">
-								<input type="text" class="form-control" name="searchName" placeholder="Search" />
+								<input type="text" class="form-control" name="searchName" placeholder="Search" required />
 							</div>
 							<div class="col-md-3">
 								<input type="submit" value="Search" class="btn btn-success" />
@@ -103,69 +108,116 @@
 			<!-- STORE -->
 			<div id="store" class="col-md-9">
 
-				
-				<!-- store products -->
-				<div class="row ms-5">
-					@foreach (var item in Model)
-					{
-						<!-- product -->
-						<div class="col-md-4">
-							<div class="product">
-								<form asp-action="Detail" asp-area="Customer" asp-controller="Home" asp-route-id="@item.Id" method="post">
-									<div class="product-img text-center">
-										<img src="@Helper.PathImageProduct/@item.ImageUrl" alt="" style="height:20vh;width:10vw;" >
-										<div class="product-label">
-											<span class="new">NEW</span>
+				@if (Model.Count>=1)
+				{
+					<!-- store products -->
+					<div class="row ms-5">
+						@foreach (var item in Model)
+						{
+							<!-- product -->
+							<div class="col-md-4">
+								<div class="product">
+									<form asp-action="Detail" asp-area="Customer" asp-controller="Home" asp-route-id="@item.Id" method="post">
+										<div class="product-img text-center">
+											<img src="@Helper.PathImageProduct/@item.ImageUrl" alt="" style="height:20vh;width:10vw;">
+											<div class="product-label">
+												<span class="new">NEW</span>
+											</div>
 										</div>
-									</div>
-									<div class="product-body">										
-										<h3 class="product-name"><a href="#">@item.Name</a></h3>
-										<h4 class="product-price price">$@item.Price <del class="product-old-price">$990.00</del></h4>
-										<div class="product-rating">
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
+										<div class="product-body">
+											<h3 class="product-name"><a href="#">@item.Name</a></h3>
+											<h4 class="product-price price">$@item.Price <del class="product-old-price">$990.00</del></h4>
+											<div class="product-rating">
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+											</div>
+											<div class="product-btns">
+												<a asp-action="Details" asp-controller="Home" asp-route-id="@item.Id" class=" quick-view">
+													<i class="fa fa-eye"></i><span class="tooltipp">Details</span>
+												</a>
+											</div>
 										</div>
-										<div class="product-btns">
-											<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-											<a asp-action="Details" asp-controller="Home" asp-route-id="@item.Id" class=" quick-view">
-												<i class="fa fa-eye"></i><span class="tooltipp">Details</span>
-											</a>
-										</div>
-									</div>
-									
-								</form>
-								<div class="add-to-cart">
-									<form asp-action="Details" asp-area="Customer" asp-controller="Home" method="post">
-										<input type="hidden" name="productId" value="@item.Id" />
-
-										<button class="add-to-cart-btn form-c"><i class="fa fa-shopping-cart"></i> Add to cart</button>
 
 									</form>
+									<div class="add-to-cart">
+										<form asp-action="Details" asp-area="Customer" asp-controller="Home" method="post">
+												<input type="hidden" name="productId" value="@item.Id" />								
+
+												@{
+													if (item.IsAvailable == true)
+													{
+														<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+
+													}
+													else
+													{
+														<button class="add-to-cart-btn" disabled><i class="fa fa-shopping-cart"></i> add to cart</button>
+
+													}
+												}
+
+											</form>
+									</div>
+
 								</div>
-								
+
+
 							</div>
+							<div class="clearfix visible-sm visible-xs"></div>
+						}
 
+						<!-- /product -->
 
-						</div>
-						<div class="clearfix visible-sm visible-xs"></div>
-					}
+					</div>
+					<!-- /store products -->
+				}
+				else
+				{
+					<div class="row ms-5 container">
+						<h2 class="text-danger">
+							Sorry ,	There Isnt Avaliable Product Right Now !!
+						</h2>
+					</div>
+				}
+				<hr />
+				<div class="mt-5 text-center">
+					<div class="mt-5">
+						@Html.PagedListPager(Model,generatePageUrl: c=>Href (contentPath:"~/Customer/Home/Shoppage?page="+c),new PagedListRenderOptions {
+						LiElementClasses = new string[] { "page-item" },
+						PageClasses = new string[] { "page-link" },
+						LinkToPreviousPageFormat= "Previous",
+						LinkToNextPageFormat = "Next",
+						DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+						DisplayLinkToNextPage = PagedListDisplayMode.Always,						
+						})
 
-					<!-- /product -->
-
+						@*LinkToPreviousPageFormat = "Previous",
+						LinkToNextPageFormat = "Next",
+						DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+						DisplayLinkToNextPage = PagedListDisplayMode.Always,
+						FunctionToTransformEachPageLink =
+						(li, a) =>
+						{
+						a.AddCssClass("page-link");
+						li.InnerHtml = a.ToString();
+						return li;
+						}*@
+					</div>
 				</div>
-				<!-- /store products -->
-
-
 			</div>
+
 			<!-- /STORE -->
+
 		</div>
 		<!-- /row -->
 	</div>
+
 	<!-- /container -->
 </div>
+
 
 <!-- /SECTION -->
 <!-- NEWSLETTER -->

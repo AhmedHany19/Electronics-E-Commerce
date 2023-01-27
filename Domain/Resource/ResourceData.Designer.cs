@@ -160,6 +160,24 @@ namespace Domain.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to يجب ادخال رقم التليفون.
+        /// </summary>
+        public static string PhoneNumber {
+            get {
+                return ResourceManager.GetString("PhoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to يجب ادخال رقم التليفون بشكل صحيح.
+        /// </summary>
+        public static string PhoneNumberError {
+            get {
+                return ResourceManager.GetString("PhoneNumberError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to يجب ادخال سعر المنتج.
         /// </summary>
         public static string PriceValue {

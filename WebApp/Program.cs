@@ -24,7 +24,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFramework
 builder.Services.ConfigureApplicationCookie(option =>
 {
 	option.LoginPath = "/Customer/Users/Login";
-	option.AccessDeniedPath = "/Admin/Home/Denied";
+	option.AccessDeniedPath = "/Customer/Home/Denied";
 });
 
 builder.Services.AddSession(options =>
@@ -42,9 +42,6 @@ builder.Services.AddScoped<IServicesRepository<Brand>, ServicesBrand>();
 builder.Services.AddScoped<IServicesRepositoryLog<LogBrand>, ServicesLogBrand>();
 builder.Services.AddScoped<IServicesRepository<Domain.Entity.Product>, ServicesProduct>();
 builder.Services.AddScoped<IServicesRepositoryLog<LogProduct>, ServicesLogProduct>();
-
-builder.Services.AddScoped<IServicesRepository<Slider>, ServicesSlider>();
-
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
@@ -89,7 +86,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
       name: "areas",
-      pattern: "{area:exists}/{controller=Accounts}/{action=Login}/{id?}"
+      pattern: "{area:exists}/{controller=Users}/{action=Login}/{id?}"
     );
 
 app.MapControllerRoute(

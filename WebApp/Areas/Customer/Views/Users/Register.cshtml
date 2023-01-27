@@ -1,5 +1,5 @@
 ﻿@using WebApp.Resource;
-@model RegisterViewModel
+@model UserRegisterViewModel
 
 @{
     ViewData["Title"] = "Register";
@@ -39,7 +39,7 @@
                 <p class="login-box-msg">Sign up to start your session</p>
 
 
-                <form asp-action="Login" asp-controller="Users" method="post">
+                <form asp-action="Register" asp-controller="Users" method="post">
                     @if (ViewBag.ErrorLogin == false)
                     {
                         <span class="alert alert-danger w-100">@ResourceWeb.lbMsgErrorLogin</span>
@@ -50,46 +50,57 @@
                     }
 
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" asp-for="NewRegister.Name" placeholder="Name">
+                        <input type="text" class="form-control" asp-for="Name" placeholder="Name" required>
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
                             </div>
                         </div>
                     </div>
-                    <span class="text-danger" asp-validation-for="NewRegister.Email"></span>
+                    <span class="text-danger" asp-validation-for="Name"></span>
 
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" asp-for="NewRegister.Email" placeholder="Email">
+                        <input type="email" class="form-control" asp-for="Email" placeholder="Email" required>
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
                             </div>
                         </div>
                     </div>
-                    <span class="text-danger" asp-validation-for="NewRegister.Email"></span>
+                    <span class="text-danger" asp-validation-for="Email"></span>
 
 
                     <div class="input-group mb-3">
-                        <input type="password" asp-for="NewRegister.Password" class="form-control" placeholder="Password">
+                        <input type="tel" class="form-control" asp-for="PhoneNumber" placeholder="Phone Number" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="text-danger" asp-validation-for="PhoneNumber"></span>
+
+
+                    <div class="input-group mb-3">
+                        <input type="password" asp-for="Password" class="form-control" placeholder="Password" required>
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
                     </div>
-                    <span class="text-danger" asp-validation-for="NewRegister.Password"></span>
+                    <span class="text-danger" asp-validation-for="Password"></span>
 
 
                      <div class="input-group mb-3">
-                        <input type="password" asp-for="NewRegister.ComfirmPassword" class="form-control" placeholder="ComfirmPassword">
+                        <input type="password" asp-for="ComfirmPassword" class="form-control" placeholder="ComfirmPassword" required>
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
                     </div>
-                    <span class="text-danger" asp-validation-for="NewRegister.ComfirmPassword"></span>
+                    <span class="text-danger" asp-validation-for="ComfirmPassword"></span>
 
 
 

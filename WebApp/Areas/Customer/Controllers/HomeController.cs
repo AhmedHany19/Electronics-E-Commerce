@@ -4,16 +4,17 @@ using Infrastructure.IRepository;
 using Infrastructure.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Stripe.BillingPortal;
 using System.Diagnostics;
 using System.Security.Claims;
 using WebApp.Models;
+using X.PagedList;
 
 namespace WebApp.Areas.Customer.Controllers
 {
     [Area("Customer")]
-    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -21,7 +22,6 @@ namespace WebApp.Areas.Customer.Controllers
         private readonly IServicesRepository<Product> _servicesProduct;
         private readonly IServicesRepository<Brand> _servicesBrand;
         private readonly ApplicationDbContext _context;
-        private readonly IServicesRepository<Slider> _servicesSlider;
 
 
         public static int brandCount = 0;
@@ -32,14 +32,13 @@ namespace WebApp.Areas.Customer.Controllers
             IServicesRepository<Product> servicesProduct,
             IServicesRepository<Category> servicesCategory,
             IServicesRepository<Brand> servicesBrand,
-            ApplicationDbContext context, IServicesRepository<Slider> servicesSlider)
+            ApplicationDbContext context)
         {
             _logger = logger;
             _servicesProduct = servicesProduct;
             _servicesCategory = servicesCategory;
             _servicesBrand = servicesBrand;
             _context = context;
-            _servicesSlider= servicesSlider;
             brandCount = _context.Brands.Count();
             categoryCount = _context.Categories.Count();
 
@@ -53,7 +52,6 @@ namespace WebApp.Areas.Customer.Controllers
             {
                 Categories = _servicesCategory.GetAll(),
                 Products = _servicesProduct.GetAll(),
-                Sliders= _servicesSlider.GetAll(),
             };
 
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -80,8 +78,9 @@ namespace WebApp.Areas.Customer.Controllers
         public async Task<IActionResult> Details(Guid id)
         {
             var product = _servicesProduct.FindBy(id);
+			ViewBag.RelatedProducts = _servicesProduct.GetAll().Where(x => x.Category==product.Category).ToList();
 
-            ShoppingCart cartObj = new ShoppingCart()
+			ShoppingCart cartObj = new ShoppingCart()
             {
                 Product= product,
                 ProductId= id
@@ -145,9 +144,9 @@ namespace WebApp.Areas.Customer.Controllers
 
 
 		[AllowAnonymous]
-        public IActionResult ShopPage()
+        public IActionResult ShopPage(int? page)
         {
-            var products = _servicesProduct.GetAll().ToList();
+            var products = _servicesProduct.GetAll().ToList().ToPagedList(pageNumber: page ?? 1, pageSize: 9);
 
             ViewBag.Categories = _servicesCategory.GetAll().ToList();
             ViewBag.Brands = _servicesBrand.GetAll().ToList();
@@ -158,12 +157,12 @@ namespace WebApp.Areas.Customer.Controllers
         // Filter By Price
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult ShopPage(double? lowAmount, double? largeAmount)
+        public IActionResult ShopPage(double? lowAmount, double? largeAmount,int? page)
         {
-            var products = _servicesProduct.GetAll().Where(c => c.Price >= lowAmount && c.Price <= largeAmount).ToList();
+            var products = _servicesProduct.GetAll().Where(c => c.Price >= lowAmount && c.Price <= largeAmount).ToList().ToPagedList(pageNumber: page ?? 1, pageSize: 9);
             if (lowAmount == null || largeAmount == null)
             {
-                products = _servicesProduct.GetAll().ToList();
+                products = _servicesProduct.GetAll().ToPagedList(pageNumber: page ?? 1, pageSize: 9);
             }
 
             ViewBag.Categories = _servicesCategory.GetAll().ToList();
@@ -174,17 +173,16 @@ namespace WebApp.Areas.Customer.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult Search(string? searchName)
+        public IActionResult Search(string? searchName,int? page)
         {
 
             if (searchName == null)
             {
                 var products = _servicesProduct.GetAll().ToList();
                 return View("ShopPage", products);
-
             }
 
-            var product = _servicesProduct.GetAll().Where(c => c.Name.Contains(searchName) || c.Category.Name.Contains(searchName) || c.Brand.Name.Contains(searchName)).ToList();
+            var product = _servicesProduct.GetAll().Where(c => c.Name.Contains(searchName) || c.Category.Name.Contains(searchName) || c.Brand.Name.Contains(searchName)).ToList().ToPagedList(pageNumber: page ?? 1, pageSize: 9);
             ViewBag.Categories = _servicesCategory.GetAll().ToList();
             ViewBag.Brands = _servicesBrand.GetAll().ToList();
             return View("ShopPage", product);
@@ -192,8 +190,11 @@ namespace WebApp.Areas.Customer.Controllers
 
 
 
+        public IActionResult Denied()
+        {
+            return View();
+        }
 
-        
 
 
 
